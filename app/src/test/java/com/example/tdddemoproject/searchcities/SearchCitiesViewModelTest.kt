@@ -1,6 +1,6 @@
 package com.example.tdddemoproject.searchcities
 
-import junit.framework.Assert.assertEquals
+import junit.framework.Assert.*
 import org.junit.Test
 
 class SearchCitiesViewModelTest {
@@ -26,55 +26,34 @@ class SearchCitiesViewModelTest {
 
     @Test
     fun checkNonExistingCity() {
-        var cityExists = false
-        for (city: MockCityModel in citiesList) {
-            if (city.name == "Arad") {
-                cityExists = true
-                break
-            }
-        }
-
-        assertEquals(false, cityExists)
+        assertFalse(citiesList.any { it.name.equals("Arad") })
     }
 
     @Test
     fun getCityByName() {
-        val citiesReturned = arrayListOf<MockCityModel>()
-
         val cityName = MockCityModel("Galati", "RO")
 
         citiesList.sortBy {
             it.name
         }
 
-        for (city: MockCityModel in citiesList) {
-            if (city.name == cityName.name) {
-                citiesReturned.add(cityName)
-            }
-        }
-
-        assertEquals("Galati", citiesReturned[0].name)
-        assertEquals(1, citiesReturned.size)
+        assertTrue(citiesList.find {
+            it.name == cityName.name
+        } != null)
     }
 
     @Test
     fun getCityByPrefix() {
         val prefix = "Alb"
-        val citiesWithPrefix = arrayListOf<MockCityModel>()
 
-        for (city: MockCityModel in citiesList) {
-            if (city.name.contains(prefix)) {
-                citiesWithPrefix.add(city)
-            }
+        assertTrue(citiesList.find {
+            it.name.contains(prefix)
+        } != null)
+
+        citiesList.removeIf {
+            !it.name.contains(prefix)
         }
 
-        citiesWithPrefix.sortBy {
-            it.name
-        }
-
-        assertEquals("Albuquerque", citiesWithPrefix[0].name)
-        assertEquals(1, citiesWithPrefix.size)
+        assertTrue(citiesList.size == 1)
     }
-
-
 }
