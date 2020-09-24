@@ -34,28 +34,31 @@ class SearchCitiesViewModelTest {
     fun getCityByName() {
         val cityName = MockCityModel("Galati", "RO")
 
-        citiesList.sortBy {
+        assertTrue(citiesList.sortedBy {
             it.name
-        }
-
-        assertTrue(citiesList.find {
-            it.name == cityName.name
-        } != null)
+        }.let { sortedList ->
+            sortedList.find { city ->
+                city.name == cityName.name
+            } != null
+        })
     }
 
     @Test
     fun getCityByPrefix() {
         val prefix = "Alb"
+        val citiesReturned = arrayListOf<MockCityModel>()
 
         assertTrue(citiesList.find {
             it.name.startsWith(prefix)
         } != null)
 
-        citiesList.removeIf {
-            !it.name.startsWith(prefix)
+        citiesList.forEach {
+            if (it.name.startsWith(prefix)) {
+                citiesReturned.add(it)
+            }
         }
 
-        assertTrue(citiesList.size == 1)
+        assertTrue(citiesReturned.size == 1)
     }
 
     @Test
@@ -75,10 +78,15 @@ class SearchCitiesViewModelTest {
     @Test
     fun checkMoreCitiesReturned() {
         val prefix = "C"
-        citiesList.removeIf {
-            !it.name.startsWith(prefix)
+        val citiesReturned = arrayListOf<MockCityModel>()
+
+        citiesList.forEach {
+            if (it.name.startsWith(prefix)) {
+                citiesReturned.add(it)
+            }
         }
-        assertTrue(citiesList.size == 3)
+
+        assertTrue(citiesReturned.size == 3)
     }
 
 }
