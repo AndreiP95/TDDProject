@@ -2,7 +2,6 @@ package com.example.tdddemoproject.utils
 
 import com.example.tdddemoproject.repo.model.City
 import com.example.tdddemoproject.repo.model.CityCoordinate
-import com.example.tdddemoproject.utils.trieImplementation.Trie
 import kotlin.random.Random
 
 object GenerateCities {
@@ -72,17 +71,6 @@ object GenerateCities {
             )
         )
     }
-
-    fun getCitiesTrie(): Trie {
-        val cities: ArrayList<City> = arrayListOf()
-        val citiesTrie = Trie()
-        initCities(cities)
-        for (city in cities) {
-            citiesTrie.insert(city)
-        }
-        return citiesTrie
-    }
-
 
     private fun generateRandomString(): String {
         val charPool: List<Char> = ('a'..'z') + ('A'..'Z')
