@@ -2,23 +2,17 @@ package com.example.tdddemoproject.searchAlgorithmTests
 
 import com.example.tdddemoproject.repo.model.City
 import com.example.tdddemoproject.repo.model.CityCoordinate
+import com.example.tdddemoproject.utils.GenerateCities
 import kotlin.random.Random
 
 object MockedCityList {
     fun getCities(): ArrayList<City> {
         val cities: ArrayList<City> = arrayListOf()
-        for (i in 0..15) {
-            cities.add(
-                City(
-                    generateRandomString(), generateRandomString(), generateRandomString(),
-                    CityCoordinate(10.0000, 12.000)
-                )
-            )
-        }
+        GenerateCities.initCities(cities)
         cities.add(
             City(
                 generateRandomString(),
-                "Citroen",
+                "Constanta",
                 generateRandomString(),
                 CityCoordinate(10.000, 10.000)
             )
