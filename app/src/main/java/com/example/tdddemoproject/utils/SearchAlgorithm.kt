@@ -1,14 +1,15 @@
 package com.example.tdddemoproject.utils
 
 import com.example.tdddemoproject.model.City
+import java.lang.IllegalArgumentException
 
 
-fun searchAlgorithm(cities: ArrayList<City>, cityToFind: String): ArrayList<City> {
-    val foundCities: ArrayList<City> = arrayListOf()
-    for(item in cities){
-        if(item.name.take(cityToFind.length) == cityToFind){
-            foundCities.add(item)
-        }
-    }
-    return foundCities
+fun searchAlgorithm(cityToFind: String): ArrayList<City>? {
+    if(cityToFind.length >= 3){
+        val citiesTrie = GenerateCities.getCitiesTrie()
+        val foundCities =  citiesTrie.findCitiesThatStartWith(cityToFind)
+        println()
+        print(foundCities.size)
+        return foundCities
+    } else throw IllegalArgumentException("Search should start at 3 chars!")
 }
