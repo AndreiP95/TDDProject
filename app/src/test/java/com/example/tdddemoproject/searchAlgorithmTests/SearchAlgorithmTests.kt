@@ -1,83 +1,82 @@
 package com.example.tdddemoproject.searchAlgorithmTests
-
-import com.example.tdddemoproject.repo.model.City
-import com.example.tdddemoproject.repo.model.CityCoordinate
+import com.example.tdddemoproject.model.City
+import com.example.tdddemoproject.model.Coodrinates
 import com.example.tdddemoproject.utils.searchAlgorithm
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.lang.IllegalArgumentException
 
 
 class SearchAlgorithmTests {
-    private lateinit var cities: List<City>
-
+    private lateinit var cities: ArrayList<City>
+    private var startTime: Long = 0
+    private var finishTime: Long = 0
     @Before
     fun setup() {
-        //cities = arrayListOf()
         cities = MockedCityList.getCities()
+        startTime = System.currentTimeMillis()
     }
 
+    @After
+    fun afterTest(){
+        finishTime = System.currentTimeMillis()
+        print("Time taken: ")
+        print(finishTime - startTime)
+        println()
+    }
     @Test
     fun searchAlgorithmRight() {
-        val foundCities = searchAlgorithm(cities, "Bucharest")
-        assert(foundCities[0].name == "Bucharest")
+        val foundCities = searchAlgorithm( "Bucharest")
+        assertEquals(foundCities?.get(0)?.name, "Bucharest")
     }
 
     @Test
     fun searchAlgorithmLowerBoundary() {
-        assert(cities.size > 0 && cities.isNotEmpty())
-    }
-
-    @Test
-    fun searchAlgorithmHigherBoundary() {
-        assert(cities.size < 200000 && cities.isNotEmpty())
+        assertTrue(cities.size > 0 && cities.isNotEmpty())
     }
 
     @Test
     fun searchAlgorithmCrossCheck() {
         val citiesWithFirstLetter = countCities("Buc")
-        assert(citiesWithFirstLetter == searchAlgorithm(cities, "Buc").size)
+        assertTrue(citiesWithFirstLetter == searchAlgorithm("Buc")?.size)
     }
 
-    @Test(expected = UnsupportedOperationException::class)
+    @Test(expected = IllegalArgumentException::class)
     fun searchAlgorithmErrorCondition() {
-        searchAlgorithm(cities, "B")
+        searchAlgorithm("B")
     }
 
-    @Test(timeout = 1000)
+    @Test(timeout = 150)
     fun searchAlgorithmPerformance() {
-        searchAlgorithm(cities, "B")
+        searchAlgorithm( "Buc")
     }
 
-    @Test
-    fun searchAlgorithmConformance() {
-        val city = City("test", "test", "test", CityCoordinate(10.00000, 10.00000))
-        assert(searchAlgorithm(cities, "Citroen")[0]::class == city::class)
-    }
+//    @Test
+//    fun searchAlgorithmConformance() {
+//        val city = City("test", "test", "test", Coodrinates(10.00000, 10.00000))
+//        assertTrue(searchAlgorithm( "Citroen")?.get(0)::class == city::class)
+//    }
 
     @Test
     fun searchAlgorithmOrdering() {
         var previous = ""
         var isInOrder = true
-        for (item in searchAlgorithm(cities, "Buc")) {
-            item.name?.let { name ->
-                if (name < previous)
-                    isInOrder = false
-                previous = name
+        for (item in searchAlgorithm( "Buc")!!) {
+            if (item.name < previous) {
+                isInOrder = false
+                break
             }
+            previous = item.name
         }
-        assert(isInOrder)
+        assertEquals(isInOrder, true)
     }
 
 
     private fun countCities(firstLetters: String): Int {
-        var citiesWithFirstLetter = 0
-        for (city in cities) {
-            if (city.name?.take(3) == firstLetters) {
-                citiesWithFirstLetter++
-            }
-        }
-        return citiesWithFirstLetter
+        return cities.count { it.name.startsWith(firstLetters) }
     }
-
 
 }
