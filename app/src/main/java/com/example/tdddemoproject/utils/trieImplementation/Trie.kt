@@ -1,6 +1,8 @@
 package com.example.tdddemoproject.utils.trieImplementation
 
-import com.example.tdddemoproject.model.City
+import android.os.Parcel
+import android.os.Parcelable
+import com.example.tdddemoproject.repo.model.City
 
 class Trie {
 
@@ -8,7 +10,31 @@ class Trie {
         var cityName: String? = null,
         var city: City? = null,
         val childNodes: MutableMap<Char, Node> = mutableMapOf()
-    )
+    ) : Parcelable {
+        constructor(parcel: Parcel) : this(
+            parcel.readString(),
+            TODO("city"),
+            TODO("childNodes")
+        )
+
+        override fun writeToParcel(parcel: Parcel, flags: Int) {
+            parcel.writeString(cityName)
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
+
+        companion object CREATOR : Parcelable.Creator<Node> {
+            override fun createFromParcel(parcel: Parcel): Node {
+                return Node(parcel)
+            }
+
+            override fun newArray(size: Int): Array<Node?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
 
     private val root = Node()
     private val foundCities: ArrayList<City> = arrayListOf()
@@ -20,14 +46,16 @@ class Trie {
 
     fun insert(city: City) {
         var currentNode = root
-        for (char in city.name) {
-            if (currentNode.childNodes[char] == null) {
-                currentNode.childNodes[char] = Node()
+        city.name?.let { cityName ->
+            for (char in cityName) {
+                if (currentNode.childNodes[char] == null) {
+                    currentNode.childNodes[char] = Node()
+                }
+                currentNode = currentNode.childNodes[char]!!
             }
-            currentNode = currentNode.childNodes[char]!!
+            currentNode.cityName = cityName
+            currentNode.city = city
         }
-        currentNode.cityName = city.name
-        currentNode.city = city
     }
 
 
@@ -39,7 +67,7 @@ class Trie {
             }
             currentNode = currentNode.childNodes[char]!!
         }
-        if (currentNode.cityName != null){
+        if (currentNode.cityName != null) {
             currentNode.city?.let { foundCities.add(it) }
         }
         return currentNode.cityName == null

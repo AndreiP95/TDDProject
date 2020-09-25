@@ -1,7 +1,6 @@
 package com.example.tdddemoproject.utils
 
-import com.example.tdddemoproject.model.City
-import java.lang.IllegalArgumentException
+import com.example.tdddemoproject.repo.model.City
 
 
 fun searchAlgorithm(cityToFind: String): ArrayList<City>? {
