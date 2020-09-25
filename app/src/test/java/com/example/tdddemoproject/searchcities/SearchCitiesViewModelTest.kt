@@ -1,6 +1,5 @@
 package com.example.tdddemoproject.searchcities
 
-import junit.framework.Assert.assertEquals
 import org.junit.Test
 
 class SearchCitiesViewModelTest {
@@ -20,8 +19,8 @@ class SearchCitiesViewModelTest {
             it.name
         }
 
-        assertEquals("Alabama", citiesList[0].name)
-        assertEquals("Albuquerque", citiesList[1].name)
+        assert("Alabama" == citiesList[0].name)
+        assert("Albuquerque" == citiesList[1].name)
     }
 
     @Test
@@ -34,7 +33,7 @@ class SearchCitiesViewModelTest {
             }
         }
 
-        assertEquals(false, cityExists)
+        assert(!cityExists)
     }
 
     @Test
@@ -53,8 +52,8 @@ class SearchCitiesViewModelTest {
             }
         }
 
-        assertEquals("Galati", citiesReturned[0].name)
-        assertEquals(1, citiesReturned.size)
+        assert(citiesReturned[0].name == "Galati")
+        assert(citiesReturned.size == 1)
     }
 
     @Test
@@ -68,12 +67,16 @@ class SearchCitiesViewModelTest {
             }
         }
 
-        citiesWithPrefix.sortBy {
+        assert(citiesList.sortBy {
             it.name
-        }
+        }.let {
+            citiesList[0].name == "Alabama"
+            citiesList[1].name == "Albuquerque"
+        })
 
-        assertEquals("Albuquerque", citiesWithPrefix[0].name)
-        assertEquals(1, citiesWithPrefix.size)
+
+        assert(citiesWithPrefix[0].name == "Albuquerque")
+        assert(citiesWithPrefix.size == 1)
     }
 
 

@@ -1,7 +1,8 @@
-package com.example.tdddemoproject
+package com.example.tdddemoproject.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.tdddemoproject.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

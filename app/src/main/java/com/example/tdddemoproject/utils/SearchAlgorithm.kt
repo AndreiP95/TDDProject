@@ -1,12 +1,11 @@
 package com.example.tdddemoproject.utils
 
-import com.example.tdddemoproject.model.City
+import com.example.tdddemoproject.repo.model.City
 
-
-fun searchAlgorithm(cities: ArrayList<City>, cityToFind: String): ArrayList<City> {
+fun searchAlgorithm(cities: List<City>, cityToFind: String): ArrayList<City> {
     val foundCities: ArrayList<City> = arrayListOf()
-    for(item in cities){
-        if(item.name.take(cityToFind.length) == cityToFind){
+    for (item in cities) {
+        if (item.name?.take(cityToFind.length) == cityToFind) {
             foundCities.add(item)
         }
     }
