@@ -1,6 +1,6 @@
 package com.example.tdddemoproject.searchcities
 
-import junit.framework.Assert.assertEquals
+import junit.framework.Assert.*
 import org.junit.Test
 
 class SearchCitiesViewModelTest {
@@ -9,72 +9,84 @@ class SearchCitiesViewModelTest {
         MockCityModel("Galati", "RO"),
         MockCityModel("Bucharest", "RO"),
         MockCityModel("Alabama", "US"),
+        MockCityModel("Calarasi", "Ro"),
         MockCityModel("Sydney", "AU"),
         MockCityModel("Cluj", "RO"),
+        MockCityModel("Constanta", "RO"),
         MockCityModel("Albuquerque", "US")
     )
 
     @Test
     fun checkFirstCities() {
-        citiesList.sortBy {
+        assertTrue(citiesList.sortedBy {
             it.name
-        }
-
-        assertEquals("Alabama", citiesList[0].name)
-        assertEquals("Albuquerque", citiesList[1].name)
+        }.let {
+            it[0].name == "Alabama" && it[1].name == "Albuquerque"
+        })
     }
 
     @Test
     fun checkNonExistingCity() {
-        var cityExists = false
-        for (city: MockCityModel in citiesList) {
-            if (city.name == "Arad") {
-                cityExists = true
-                break
-            }
-        }
-
-        assertEquals(false, cityExists)
+        assertFalse(citiesList.any { it.name == "Arad" })
     }
 
     @Test
     fun getCityByName() {
-        val citiesReturned = arrayListOf<MockCityModel>()
-
         val cityName = MockCityModel("Galati", "RO")
 
-        citiesList.sortBy {
+        assertTrue(citiesList.sortedBy {
             it.name
-        }
-
-        for (city: MockCityModel in citiesList) {
-            if (city.name == cityName.name) {
-                citiesReturned.add(cityName)
-            }
-        }
-
-        assertEquals("Galati", citiesReturned[0].name)
-        assertEquals(1, citiesReturned.size)
+        }.let { sortedList ->
+            sortedList.find { city ->
+                city.name == cityName.name
+            } != null
+        })
     }
 
     @Test
     fun getCityByPrefix() {
         val prefix = "Alb"
-        val citiesWithPrefix = arrayListOf<MockCityModel>()
+        val citiesReturned = arrayListOf<MockCityModel>()
 
-        for (city: MockCityModel in citiesList) {
-            if (city.name.contains(prefix)) {
-                citiesWithPrefix.add(city)
+        assertTrue(citiesList.find {
+            it.name.startsWith(prefix)
+        } != null)
+
+        citiesList.forEach {
+            if (it.name.startsWith(prefix)) {
+                citiesReturned.add(it)
             }
         }
 
-        citiesWithPrefix.sortBy {
-            it.name
-        }
-
-        assertEquals("Albuquerque", citiesWithPrefix[0].name)
-        assertEquals(1, citiesWithPrefix.size)
+        assertTrue(citiesReturned.size == 1)
     }
 
+    @Test
+    fun searchWithOneCharacter() {
+        val prefix = "a"
+
+        assertFalse(prefix.length > 3)
+    }
+
+    @Test
+    fun searchWithTwoCharacters() {
+        val prefix = "ab"
+
+        assertFalse(prefix.length > 3)
+    }
+
+    @Test
+    fun checkMoreCitiesReturned() {
+        val prefix = "C"
+        val citiesReturned = arrayListOf<MockCityModel>()
+
+        citiesList.forEach {
+            if (it.name.startsWith(prefix)) {
+                citiesReturned.add(it)
+            }
+        }
+
+        assertTrue(citiesReturned.size == 3)
+    }
 
 }
