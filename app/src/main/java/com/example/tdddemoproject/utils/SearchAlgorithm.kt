@@ -2,13 +2,14 @@ package com.example.tdddemoproject.utils
 
 import com.example.tdddemoproject.repo.model.City
 
-
-fun searchAlgorithm(cityToFind: String): ArrayList<City>? {
-    if(cityToFind.length >= 3){
-        val citiesTrie = GenerateCities.getCitiesTrie()
-        val foundCities =  citiesTrie.findCitiesThatStartWith(cityToFind)
-        println()
-        print(foundCities.size)
-        return foundCities
-    } else throw IllegalArgumentException("Search should start at 3 chars!")
+/**
+ * Calls a Trie - Prefix Tree - in order to display the cities that
+ * contain the input written by the user
+ *
+ * @param cities - The list that contains all the available cities
+ * @param cityToFind - The pattern written by the user
+ * @return - A nullable list of cities that match the input written by the user
+ */
+fun searchAlgorithm(cities: ArrayList<City>, cityToFind: String): ArrayList<City>? {
+    return null
 }
