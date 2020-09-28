@@ -1,6 +1,8 @@
 package com.example.tdddemoproject.ui.search
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,10 +32,13 @@ class SearchCitiesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupUI()
+
     }
 
     private fun setupUI() {
         addCities()
+
+        changeListByPrefix()
     }
 
     private fun addCities() {
@@ -50,5 +55,22 @@ class SearchCitiesFragment : Fragment() {
             })
     }
 
+    private fun changeListByPrefix() {
+        et_search_city.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                s?.let {
+                    searchCitiesViewModel.getCitiesWithPrefix(s)
+                }
+            }
+
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
+    }
 
 }

@@ -24,4 +24,14 @@ class SearchCitiesViewModel() : ViewModel(), KoinComponent {
         citiesLiveData.value = cityArrayList
     }
 
+    fun getCitiesWithPrefix(s: CharSequence) {
+        val citiesWithPrefix = arrayListOf<City>()
+        for (city: City in cityArrayList) {
+            if (city.name!!.startsWith(s)) {
+                citiesWithPrefix.add(city)
+            }
+        }
+        citiesLiveData.value = citiesWithPrefix
+    }
+
 }
