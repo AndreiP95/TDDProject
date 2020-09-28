@@ -46,7 +46,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Long: " />
+            android:text="@string/longitude" />
 
         <TextView
             android:id="@+id/tv_long"
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text="Lat: " />
+            android:text="@string/latitude" />
 
         <TextView
             android:id="@+id/tv_lat"
