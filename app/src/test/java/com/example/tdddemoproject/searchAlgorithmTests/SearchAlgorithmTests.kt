@@ -94,16 +94,16 @@ class SearchAlgorithmTests {
         var previous = ""
         var isInOrder = true
         val foundCities = searchAlgorithm(cities, "Buc")
-        if (foundCities != null) {
-            for (item in foundCities) {
+        for (item in foundCities) {
+            if (item != null) {
                 if (item.name != null && item.name.toString() < previous) {
                     isInOrder = false
                     break
                 }
                 previous = item.name.toString()
             }
-            assertEquals(true, isInOrder)
         }
+        assertEquals(true, isInOrder)
     }
 
 

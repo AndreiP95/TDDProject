@@ -5,73 +5,57 @@ import com.example.tdddemoproject.repo.model.CityCoordinate
 import kotlin.random.Random
 
 object GenerateCities {
+    /**
+     * Initializes the mocked city list
+     *
+     * @param cities - The List of cities in which mocked cities will be added
+     */
     fun initCities(cities: ArrayList<City>) {
-        for (i in 0..200000) {
+        generateCities(cities)
+    }
+
+    /**
+     * Generates a number of random cities
+     *
+     * @param cities
+     */
+    private fun generateCities(cities: ArrayList<City>) {
+        var cityNames: List<String> = listOf(
+            "Constanta",
+            "Bucharest",
+            "Buchar",
+            "Buchare",
+            "Buchat",
+            "Bucharst",
+            "Buchart"
+        )
+        cityNames.forEach {
             cities.add(
                 City(
-                    generateRandomString(), generateRandomString(), generateRandomString(),
+                    it,
+                    generateRandomString(),
+                    generateRandomString(),
                     CityCoordinate(10.0000, 12.000)
                 )
             )
         }
-        cities.add(
-            City(
-                generateRandomString(),
-                "Citroen",
-                generateRandomString(),
-                CityCoordinate(10.000, 10.000)
+        for (i in 0..200000) {
+            cities.add(
+                City(
+                    generateRandomString(),
+                    generateRandomString(),
+                    generateRandomString(),
+                    CityCoordinate(10.0000, 12.000)
+                )
             )
-        )
-        cities.add(
-            City(
-                generateRandomString(),
-                "Bucharest",
-                generateRandomString(),
-                CityCoordinate(10.000, 10.000)
-            )
-        )
-        cities.add(
-            City(
-                generateRandomString(),
-                "Buchar",
-                generateRandomString(),
-                CityCoordinate(10.000, 10.000)
-            )
-        )
-        cities.add(
-            City(
-                generateRandomString(),
-                "Buchare",
-                generateRandomString(),
-                CityCoordinate(10.000, 10.000)
-            )
-        )
-        cities.add(
-            City(
-                generateRandomString(),
-                "Buchat",
-                generateRandomString(),
-                CityCoordinate(10.000, 10.000)
-            )
-        )
-        cities.add(
-            City(
-                generateRandomString(),
-                "Bucharst",
-                generateRandomString(),
-                CityCoordinate(10.000, 10.000)
-            )
-        )
-        cities.add(
-            City(
-                generateRandomString(),
-                "Buchart",
-                generateRandomString(),
-                CityCoordinate(10.000, 10.000)
-            )
-        )
+        }
     }
 
+    /**
+     * Generates a random String
+     *
+     * @return
+     */
     private fun generateRandomString(): String {
         val charPool: List<Char> = ('a'..'z') + ('A'..'Z')
         val randomString = (1..10)
