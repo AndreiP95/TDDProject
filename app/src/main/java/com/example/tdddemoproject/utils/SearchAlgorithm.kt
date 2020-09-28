@@ -10,6 +10,6 @@ import com.example.tdddemoproject.repo.model.City
  * @param cityToFind - The pattern written by the user
  * @return - A nullable list of cities that match the input written by the user
  */
-fun searchAlgorithm(cities: ArrayList<City>, cityToFind: String): ArrayList<City>? {
-    return null
+fun searchAlgorithm(cities: ArrayList<City>, cityToFind: String): ArrayList<City?> {
+    return arrayListOf()
 }
