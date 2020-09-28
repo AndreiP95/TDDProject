@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tdddemoproject.repo.model.City
 import org.koin.core.KoinComponent
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SearchCitiesViewModel() : ViewModel(), KoinComponent {
 
@@ -24,10 +26,12 @@ class SearchCitiesViewModel() : ViewModel(), KoinComponent {
         citiesLiveData.value = cityArrayList
     }
 
-    fun getCitiesWithPrefix(s: CharSequence) {
+    fun getCitiesWithPrefix(s: String) {
         val citiesWithPrefix = arrayListOf<City>()
         for (city: City in cityArrayList) {
-            if (city.name!!.startsWith(s)) {
+            if (city.name?.toUpperCase(Locale.getDefault())!!
+                    .startsWith(s.toUpperCase(Locale.getDefault()))
+            ) {
                 citiesWithPrefix.add(city)
             }
         }

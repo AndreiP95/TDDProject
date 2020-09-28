@@ -1,8 +1,6 @@
 package com.example.tdddemoproject.ui.search
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tdddemoproject.R
 import com.example.tdddemoproject.repo.model.City
 import com.example.tdddemoproject.ui.search.adapter.CityAdapter
+import com.example.tdddemoproject.utils.afterTextChanged
 import kotlinx.android.synthetic.main.fragment_search_cities.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.collections.ArrayList
@@ -56,21 +55,9 @@ class SearchCitiesFragment : Fragment() {
     }
 
     private fun changeListByPrefix() {
-        et_search_city.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                s?.let {
-                    searchCitiesViewModel.getCitiesWithPrefix(s)
-                }
-            }
-
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-        })
+        et_search_city.afterTextChanged {
+            searchCitiesViewModel.getCitiesWithPrefix(it)
+        }
     }
 
 }
