@@ -19,6 +19,10 @@ class Trie(private var city: City?, private var value: String?) {
          * @param cities - Cities that will be inserted in the Trie
          * @return - Trie that contains parsed cities
          */
+        // TODO -> Init tree might be called multiple times here
+        // TODO -> Trie should be a Singleton object
+        // TODO -> Use DI in BaseApplication for Trie injection.
+
         fun initTrie(cities: ArrayList<City>): Trie {
             val citiesTrie = Trie()
             cities.forEach { citiesTrie.insert(it) }
