@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/placeholder">
+    app:startDestination="@id/splashScreenFragment">
 
-    <fragment android:id="@+id/placeholder" />
+    <fragment
+        android:id="@+id/splashScreenFragment"
+        android:name="com.example.tdddemoproject.ui.splashScreen.SplashScreenFragment"
+        android:label="splash_screen_fragment"
+        tools:layout="@layout/splash_screen_fragment" />
 </navigation>
