@@ -1,8 +1,6 @@
 package com.example.tdddemoproject.utils.trie
 
 import com.example.tdddemoproject.repo.model.City
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Trie class that contains all logic regarding adding and finding Cities
@@ -14,10 +12,24 @@ class Trie(private var city: City?, private var value: String?) {
     private val children: MutableMap<Char, Trie>
     private var terminal = false
 
+    companion object {
+        /**
+         * Method initialises Trie and inserts each City
+         *
+         * @param cities - Cities that will be inserted in the Trie
+         * @return - Trie that contains parsed cities
+         */
+        fun initTrie(cities: ArrayList<City>): Trie {
+            val citiesTrie = Trie()
+            cities.forEach { citiesTrie.insert(it) }
+            return citiesTrie
+        }
+    }
+
     /**
      * Secondary constructor
      */
-    constructor(): this(null, null)
+    constructor() : this(null, null)
 
     /**
      * Inserting city inside Trie
@@ -61,11 +73,11 @@ class Trie(private var city: City?, private var value: String?) {
      * @param prefix - Input that will be searched
      * @return - ArrayList of found cities with names that match the given prefix
      */
-    fun findCitiesWith(prefix: String): ArrayList<City?> {
+    fun findCitiesWith(prefix: String): ArrayList<City>? {
         var node: Trie? = this
         for (c in prefix.toCharArray()) {
             if (node != null && !node.children.containsKey(c)) {
-                return emptyList<City?>() as ArrayList<City?>
+                return arrayListOf()
             }
             if (node != null) {
                 node = node.children[c]
@@ -75,18 +87,20 @@ class Trie(private var city: City?, private var value: String?) {
     }
 
     /**
-     * Recursive method that finds in childs the nodes that contain the given prefixes
+     * Recursive method that finds in children the nodes that contain the given prefixes
      *
      * @return - The ArrayList of cities that contains the prefixes
      */
-    private fun allPrefixes(): ArrayList<City?> {
-        val results: ArrayList<City?> = ArrayList()
+    private fun allPrefixes(): ArrayList<City>? {
+        val results: ArrayList<City>? = ArrayList()
         if (terminal) {
-            results.add(city)
+            city?.let { results?.add(it) }
         }
         for ((_, child) in children) {
             val childPrefixes = child.allPrefixes()
-            results.addAll(childPrefixes)
+            if (childPrefixes != null) {
+                results?.addAll(childPrefixes)
+            }
         }
         return results
     }
