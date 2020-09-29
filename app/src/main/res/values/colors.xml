@@ -6,4 +6,6 @@
     <color name="orange">#e74c3c</color>
     <color name="text_color_white">#ffffff</color>
     <color name="text_color_black">#000000</color>
+    <color name="background_gray">#bfbfbf</color>
+    <color name="background_white">#ffffff</color>
 </resources>
