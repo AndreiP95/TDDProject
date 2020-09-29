@@ -6,4 +6,6 @@
     <string name="no_city_for_input">Nu exista orase pentru cuvantul cheie Abcd</string>
     <string name="longitude">"Long: "</string>
     <string name="latitude">"Lat: "</string>
+    <string name="error_loading_screen_message">Lista de orase nu a putut fi preluata. \n Te rugam sa mai incerci odata.</string>
+    <string name="error_loading_reload_text">Reincearca</string>
 </resources>
