@@ -10,6 +10,7 @@ import com.example.tdddemoproject.utils.trie.Trie
  * @param cityToFind - The user's input
  * @return - An ArrayList of cities that contains the given input in City Name
  */
+
 fun searchAlgorithm(citiesTrie: Trie, cityToFind: String): ArrayList<City>? {
     return citiesTrie.findCitiesWith(cityToFind)
 }
