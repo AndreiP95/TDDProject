@@ -3,6 +3,8 @@ package com.example.tdddemoproject.ui.search
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tdddemoproject.repo.model.City
+import com.example.tdddemoproject.utils.searchAlgorithm
+import com.example.tdddemoproject.utils.trie.Trie
 import org.koin.core.KoinComponent
 import java.util.*
 import kotlin.collections.ArrayList
@@ -27,14 +29,8 @@ class SearchCitiesViewModel() : ViewModel(), KoinComponent {
     }
 
     fun getCitiesWithPrefix(s: String) {
-        val citiesWithPrefix = arrayListOf<City>()
-        for (city: City in cityArrayList) {
-            if (city.name?.toUpperCase(Locale.getDefault())!!
-                    .startsWith(s.toUpperCase(Locale.getDefault()))
-            ) {
-                citiesWithPrefix.add(city)
-            }
-        }
+        val trie = Trie.initTrie(cityArrayList)
+        val citiesWithPrefix = searchAlgorithm(trie, s)
         citiesLiveData.value = citiesWithPrefix
     }
 
