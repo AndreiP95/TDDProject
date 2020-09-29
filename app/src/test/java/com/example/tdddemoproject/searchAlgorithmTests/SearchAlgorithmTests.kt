@@ -1,8 +1,8 @@
 package com.example.tdddemoproject.searchAlgorithmTests
 
 import com.example.tdddemoproject.repo.model.City
-import com.example.tdddemoproject.utils.Trie
-import com.example.tdddemoproject.utils.Trie.Companion.initTrie
+import com.example.tdddemoproject.utils.trie.Trie
+import com.example.tdddemoproject.utils.trie.Trie.Companion.initTrie
 import com.example.tdddemoproject.utils.searchAlgorithm
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -30,7 +30,16 @@ class SearchAlgorithmTests {
      * Right - checks if the tested functions returns the expected value
      */
     @Test
-    fun searchAlgorithmRight() {
+    fun searchAlgorithmRightLowercase() {
+        val foundCities = searchAlgorithm(trie, "bucharest")
+        assertEquals("Bucharest", foundCities?.get(0)?.name)
+    }
+
+    /**
+     * Right - Checks if the tested function returns the expected value
+     */
+    @Test
+    fun searchAlgorithmRightUppercase() {
         val foundCities = searchAlgorithm(trie, "Bucharest")
         assertEquals("Bucharest", foundCities?.get(0)?.name)
     }
