@@ -1,8 +1,9 @@
 package com.example.tdddemoproject.searchAlgorithmTests
 
 import com.example.tdddemoproject.repo.model.City
+import com.example.tdddemoproject.utils.Trie
+import com.example.tdddemoproject.utils.Trie.Companion.initTrie
 import com.example.tdddemoproject.utils.searchAlgorithm
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -10,29 +11,16 @@ import org.junit.Test
 
 class SearchAlgorithmTests {
     private lateinit var cities: ArrayList<City>
-    private var startTime: Long = 0
-    private var finishTime: Long = 0
+    private lateinit var trie: Trie
 
     /**
      * Setting up mocked city list before every test
-     * Declaring the start time of each test for time-performance measurement
+     * Setting up Trie before each test
      */
     @Before
     fun setup() {
         cities = MockedCityList.getCities()
-        startTime = System.currentTimeMillis()
-    }
-
-    /**
-     * Setting up finish time for each test for time-performance measurement
-     * Printing the time taken for a test to finish
-     */
-    @After
-    fun afterTest() {
-        finishTime = System.currentTimeMillis()
-        print("Time taken: ")
-        print(finishTime - startTime)
-        println()
+        trie = initTrie(cities)
     }
 
     /**
@@ -43,8 +31,32 @@ class SearchAlgorithmTests {
      */
     @Test
     fun searchAlgorithmRight() {
-        val foundCities = searchAlgorithm(cities, "Bucharest")
+        val foundCities = searchAlgorithm(trie, "Bucharest")
         assertEquals("Bucharest", foundCities?.get(0)?.name)
+    }
+
+    /**
+     * Right - checks if the functions returns all cities if there is no input
+     */
+    @Test
+    fun searchAlgorithmRightNoInput() {
+        val foundCities = searchAlgorithm(trie, "")
+        if (foundCities != null) {
+            assertTrue(cities.size == foundCities.size)
+        }
+    }
+
+    /**
+     * Right - if there is no existing input in the Trie,
+     * an empty ArrayList will be returned
+     *
+     */
+    @Test
+    fun searchAlgorithmRightNoCitiesFound(){
+        val foundCities = searchAlgorithm(trie, "NonExistingCity")
+        if (foundCities != null) {
+            assertTrue(foundCities.isEmpty())
+        }
     }
 
     /**
@@ -55,18 +67,10 @@ class SearchAlgorithmTests {
         val citiesWithFirstLetter = countCities("Buc")
         assertTrue(
             citiesWithFirstLetter == searchAlgorithm(
-                cities,
+                trie,
                 "Buc"
             )?.size && cities.isNotEmpty()
         )
-    }
-
-    /**
-     * Error Conditions - checks if the tested method handles error throwing
-     */
-    @Test(expected = IllegalArgumentException::class)
-    fun searchAlgorithmErrorCondition() {
-        searchAlgorithm(cities, "B")
     }
 
     /**
@@ -74,7 +78,7 @@ class SearchAlgorithmTests {
      */
     @Test(timeout = 150)
     fun searchAlgorithmPerformance() {
-        searchAlgorithm(cities, "Buc")
+        searchAlgorithm(trie, "Buc")
     }
 
     /**
@@ -82,30 +86,9 @@ class SearchAlgorithmTests {
      */
     @Test
     fun searchAlgorithmConformance() {
-        val foundCities = searchAlgorithm(cities, "Buc")
+        val foundCities = searchAlgorithm(trie, "Buc")
         assertTrue(foundCities?.get(0) is City)
     }
-
-    /**
-     * Ordering - check if the values of the given List are sorted
-     */
-    @Test
-    fun searchAlgorithmOrdering() {
-        var previous = ""
-        var isInOrder = true
-        val foundCities = searchAlgorithm(cities, "Buc")
-        for (item in foundCities) {
-            if (item != null) {
-                if (item.name != null && item.name.toString() < previous) {
-                    isInOrder = false
-                    break
-                }
-                previous = item.name.toString()
-            }
-        }
-        assertEquals(true, isInOrder)
-    }
-
 
     /**
      * A helper method that is needed to create a Cross Check test
