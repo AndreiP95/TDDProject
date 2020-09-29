@@ -1,15 +1,16 @@
 package com.example.tdddemoproject.utils
 
 import com.example.tdddemoproject.repo.model.City
+import com.example.tdddemoproject.utils.trie.Trie
 
 /**
- * Calls a Trie - Prefix Tree - in order to display the cities that
- * contain the input written by the user
+ * Method searches in Trie the input given by the user
  *
- * @param cities - The list that contains all the available cities
- * @param cityToFind - The pattern written by the user
- * @return - A nullable list of cities that match the input written by the user
+ * @param citiesTrie - The initialised Trie that contains all the parsed cities
+ * @param cityToFind - The user's input
+ * @return - An ArrayList of cities that contains the given input in City Name
  */
-fun searchAlgorithm(trie: Trie, cityToFind: String): ArrayList<City>? {
-    return arrayListOf()
+
+fun searchAlgorithm(citiesTrie: Trie, cityToFind: String): ArrayList<City>? {
+    return citiesTrie.findCitiesWith(cityToFind)
 }

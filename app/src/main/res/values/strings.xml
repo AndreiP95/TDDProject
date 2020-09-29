@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">TDD Demo Project</string>
+    <string name="cauta_orase">Cauta orase</string>
+    <string name="reincearca">Reincearca</string>
+    <string name="list_not_found">Lista de orase nu a putut fi preluata. \nTe rugam sa mai incerci odata</string>
+    <string name="no_city_for_input">Nu exista orase pentru cuvantul cheie Abcd</string>
+    <string name="longitude">"Long: "</string>
+    <string name="latitude">"Lat: "</string>
 </resources>
