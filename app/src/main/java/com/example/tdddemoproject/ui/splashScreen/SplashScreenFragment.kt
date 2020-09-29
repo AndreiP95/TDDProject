@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.example.tdddemoproject.R
 import com.example.tdddemoproject.repo.model.City
 import com.example.tdddemoproject.ui.search.SearchCitiesFragment
 import com.example.tdddemoproject.utils.searchAlgorithm
+import com.example.tdddemoproject.utils.trie.Trie
 import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.android.synthetic.main.splash_screen_fragment.view.*
 import java.io.InputStream
@@ -20,6 +22,7 @@ import java.io.InputStream
 class SplashScreenFragment : Fragment() {
     private lateinit var reader: InputStream
     var cityJsonList : List<City>? = null
+    val action = SplashScreenFragmentDirections.actionGoToSearchScreen()
 
     companion object {
         fun newInstance() = SplashScreenFragment()
@@ -41,8 +44,11 @@ class SplashScreenFragment : Fragment() {
             for( item in sortedCityList){
                 finaList?.add(item)
             }
-            finaList?.let { searchAlgorithm(it,"") }
-            moveToSearchFragment()
+
+            var trieList =  finaList?.let { Trie.initTrie(it) }
+
+            trieList?.let { searchAlgorithm(it,"") }
+            findNavController().navigate(action)
         }else{
             root.splash_screen_layout.visibility = View.GONE
             root.loading_error_screen_layout.visibility = View.VISIBLE
