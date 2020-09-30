@@ -56,51 +56,73 @@ class SearchCitiesFragment : Fragment() {
 
 
     private fun changeListByPrefix() {
-        et_search_city.afterTextChanged {
+        et_search_city.afterTextChanged { city ->
             showProgressBar()
             hideNoCityForPrefixError()
             changeColorOfLayout(R.color.background_gray)
 
             lifecycleScope.launch {
                 delay(200)
-                searchCitiesViewModel.getCitiesWithPrefix(it)
-                if (searchCitiesViewModel.citiesLiveData.value.isNullOrEmpty()) {
-                    showCityNotFoundError(it)
-                    changeColorOfLayout(R.color.background_white)
-                    hideProgressBar()
-                } else {
-                    hideCityNotFoundError()
-                    changeColorOfLayout(R.color.background_white)
-                    hideProgressBar()
+                searchCitiesViewModel.getCitiesWithPrefix(city)
+                searchCitiesViewModel.citiesLiveData.value?.let { cityList ->
+                    validateCityList(cityList, city)
                 }
             }
         }
     }
 
-    private fun changeColorOfLayout(color: Int) {
+    fun validateCityList(cityList: ArrayList<City>, city: String) {
+        if (cityList.isNullOrEmpty()) {
+            showCityError(city)
+            hideRecyclerViewCities()
+        } else {
+            hideCityError()
+            showRecyclerViewCities()
+        }
+    }
+
+    fun hideCityError() {
+        hideNoCityForPrefixError()
+        changeColorOfLayout(R.color.background_white)
+        hideProgressBar()
+    }
+
+    fun showCityError(city: String) {
+        showCityNotFoundError(city)
+        changeColorOfLayout(R.color.background_white)
+        hideProgressBar()
+    }
+
+    fun changeColorOfLayout(color: Int) {
         layout_search_cities.setBackgroundColor(ContextCompat.getColor(requireContext(), color))
     }
 
-    private fun hideNoCityForPrefixError() {
+    fun hideNoCityForPrefixError() {
         tv_no_cities.visibility = View.GONE
     }
 
-    private fun showCityNotFoundError(cityNotFound: String) {
-        recycler_view_cities.visibility = View.GONE
+    fun showCityNotFoundError(cityNotFound: String) {
         tv_no_cities.text = "Nu exista orase pentru cuvantul cheie $cityNotFound"
         tv_no_cities.visibility = View.VISIBLE
     }
 
-    private fun hideCityNotFoundError() {
-        recycler_view_cities.visibility = View.VISIBLE
-        tv_no_cities.visibility = View.GONE
+    fun hideRecyclerViewCities() {
+        recycler_view_cities.visibility = View.GONE
     }
 
-    private fun showProgressBar() {
+    /*fun hideCityNotFoundError() {
+        tv_no_cities.visibility = View.GONE
+    }*/
+
+    fun showRecyclerViewCities() {
+        recycler_view_cities.visibility = View.VISIBLE
+    }
+
+    fun showProgressBar() {
         progress_bar.visibility = View.VISIBLE
     }
 
-    private fun hideProgressBar() {
+    fun hideProgressBar() {
         progress_bar.visibility = View.GONE
     }
 
