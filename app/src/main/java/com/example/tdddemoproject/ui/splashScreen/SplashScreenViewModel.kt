@@ -14,7 +14,8 @@ class SplashScreenViewModel : ViewModel(), KoinComponent {
         val sortedCityList: List<City> = cities.sortedWith(
             compareBy(
                 { it.name },
-                { it.country })
+                { it.country }
+            )
         )
         sortedCityList.let { trie.populateTrie(it) }
     }

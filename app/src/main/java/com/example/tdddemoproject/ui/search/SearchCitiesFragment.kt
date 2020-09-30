@@ -32,9 +32,7 @@ class SearchCitiesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupUI()
-
     }
 
     private fun setupUI() {
@@ -43,7 +41,7 @@ class SearchCitiesFragment : Fragment() {
     }
 
     private fun addCities() {
-        searchCitiesViewModel.populateList()
+        searchCitiesViewModel.getCitiesWithPrefix()
 
         searchCitiesViewModel.citiesLiveData.observe(
             viewLifecycleOwner,
@@ -65,25 +63,22 @@ class SearchCitiesFragment : Fragment() {
 
             lifecycleScope.launch {
                 delay(200)
-                changeColorOfLayout(R.color.background_white)
-                hideProgressBar()
-                showNoCityForPrefixError()
                 searchCitiesViewModel.getCitiesWithPrefix(it)
-                if (searchCitiesViewModel.citiesLiveData.value!!.isEmpty()) {
+                if (searchCitiesViewModel.citiesLiveData.value.isNullOrEmpty()) {
                     showCityNotFoundError(it)
+                    changeColorOfLayout(R.color.background_white)
+                    hideProgressBar()
                 } else {
                     hideCityNotFoundError()
+                    changeColorOfLayout(R.color.background_white)
+                    hideProgressBar()
                 }
-            }.start()
+            }
         }
     }
 
     private fun changeColorOfLayout(color: Int) {
         layout_search_cities.setBackgroundColor(ContextCompat.getColor(requireContext(), color))
-    }
-
-    private fun showNoCityForPrefixError() {
-        tv_no_cities.visibility = View.VISIBLE
     }
 
     private fun hideNoCityForPrefixError() {
