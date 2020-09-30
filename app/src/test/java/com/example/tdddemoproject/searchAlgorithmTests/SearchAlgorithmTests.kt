@@ -1,15 +1,23 @@
 package com.example.tdddemoproject.searchAlgorithmTests
 
+import com.example.tdddemoproject.BaseApplication
 import com.example.tdddemoproject.repo.model.City
 import com.example.tdddemoproject.utils.trie.Trie
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import org.koin.java.KoinJavaComponent.inject
 
 class SearchAlgorithmTests {
-    private lateinit var cities: ArrayList<City>
-    private lateinit var trie: Trie
+    private var cities = MockedCityList.getCities()
+    private val trie by inject(Trie::class.java)
+
+    companion object {
+        private var isInitialized = false
+    }
 
     /**
      * Setting up mocked city list before every test
@@ -17,8 +25,15 @@ class SearchAlgorithmTests {
      */
     @Before
     fun setup() {
-        cities = MockedCityList.getCities()
-        trie.populateTrie(cities)
+        if (!isInitialized) {
+            val app = BaseApplication()
+            startKoin {
+                androidContext(app)
+                modules(app.trieModule)
+            }
+            trie.populateTrie(cities)
+            isInitialized = true
+        }
     }
 
     /**
@@ -71,6 +86,17 @@ class SearchAlgorithmTests {
     }
 
     /**
+     * Error conditions - checks if the algorithm handles wrong inputs
+     *
+     */
+    @Test(expected = IllegalArgumentException::class)
+    fun searchAlgorithmErrorConditions() {
+        val citiesListWithEmptyCity = arrayListOf<City>()
+        citiesListWithEmptyCity.add(City())
+        trie.populateTrie(citiesListWithEmptyCity)
+    }
+
+    /**
      * Performance - checks if the method runs in a specific time interval
      */
     @Test(timeout = 150)
@@ -94,7 +120,10 @@ class SearchAlgorithmTests {
      * @return - the number of cities that starts with the given input
      */
     private fun countCities(firstLetters: String): Int {
-        return cities.count { it.name.toString().startsWith(firstLetters) }
+        return cities.count {
+            it.name.toString().startsWith(firstLetters) ||
+                    it.name.toString().startsWith(firstLetters.toLowerCase())
+        }
     }
 
 }
