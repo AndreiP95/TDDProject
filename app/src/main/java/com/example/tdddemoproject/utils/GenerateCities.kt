@@ -20,7 +20,7 @@ object GenerateCities {
      * @param cities
      */
     private fun generateCities(cities: ArrayList<City>) {
-        var cityNames: List<String> = listOf(
+        val cityNames: List<String> = listOf(
             "Constanta",
             "Bucharest",
             "Buchar",
@@ -33,16 +33,6 @@ object GenerateCities {
             cities.add(
                 City(
                     it,
-                    generateRandomString(),
-                    generateRandomString(),
-                    CityCoordinate(10.0000, 12.000)
-                )
-            )
-        }
-        for (i in 0..200000) {
-            cities.add(
-                City(
-                    generateRandomString(),
                     generateRandomString(),
                     generateRandomString(),
                     CityCoordinate(10.0000, 12.000)
