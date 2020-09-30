@@ -1,9 +1,7 @@
 package com.example.tdddemoproject.searchAlgorithmTests
 
 import com.example.tdddemoproject.repo.model.City
-import com.example.tdddemoproject.utils.Trie
-import com.example.tdddemoproject.utils.Trie.Companion.initTrie
-import com.example.tdddemoproject.utils.searchAlgorithm
+import com.example.tdddemoproject.utils.trie.Trie
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -20,7 +18,7 @@ class SearchAlgorithmTests {
     @Before
     fun setup() {
         cities = MockedCityList.getCities()
-        trie = initTrie(cities)
+        trie.populateTrie(cities)
     }
 
     /**
@@ -31,7 +29,7 @@ class SearchAlgorithmTests {
      */
     @Test
     fun searchAlgorithmRight() {
-        val foundCities = searchAlgorithm(trie, "Bucharest")
+        val foundCities = trie.findCitiesWith("Bucharest")
         assertEquals("Bucharest", foundCities?.get(0)?.name)
     }
 
@@ -40,7 +38,7 @@ class SearchAlgorithmTests {
      */
     @Test
     fun searchAlgorithmRightNoInput() {
-        val foundCities = searchAlgorithm(trie, "")
+        val foundCities = trie.findCitiesWith("")
         if (foundCities != null) {
             assertTrue(cities.size == foundCities.size)
         }
@@ -52,8 +50,8 @@ class SearchAlgorithmTests {
      *
      */
     @Test
-    fun searchAlgorithmRightNoCitiesFound(){
-        val foundCities = searchAlgorithm(trie, "NonExistingCity")
+    fun searchAlgorithmRightNoCitiesFound() {
+        val foundCities = trie.findCitiesWith("NonExistingCity")
         if (foundCities != null) {
             assertTrue(foundCities.isEmpty())
         }
@@ -66,8 +64,7 @@ class SearchAlgorithmTests {
     fun searchAlgorithmCrossCheck() {
         val citiesWithFirstLetter = countCities("Buc")
         assertTrue(
-            citiesWithFirstLetter == searchAlgorithm(
-                trie,
+            citiesWithFirstLetter == trie.findCitiesWith(
                 "Buc"
             )?.size && cities.isNotEmpty()
         )
@@ -78,7 +75,7 @@ class SearchAlgorithmTests {
      */
     @Test(timeout = 150)
     fun searchAlgorithmPerformance() {
-        searchAlgorithm(trie, "Buc")
+        trie.findCitiesWith("Buc")
     }
 
     /**
@@ -86,7 +83,7 @@ class SearchAlgorithmTests {
      */
     @Test
     fun searchAlgorithmConformance() {
-        val foundCities = searchAlgorithm(trie, "Buc")
+        val foundCities = trie.findCitiesWith("Buc")
         assertTrue(foundCities?.get(0) is City)
     }
 
