@@ -62,12 +62,14 @@ class SearchCitiesFragment : Fragment() {
     private fun changeListByPrefix() {
         et_search_city.afterTextChanged {
             showProgressBar()
+            hideNoCityForPrefixError()
             changeColorOfLayout(R.color.background_gray)
 
             lifecycleScope.launch {
                 delay(200)
                 changeColorOfLayout(R.color.background_white)
                 hideProgressBar()
+                showNoCityForPrefixError()
                 searchCitiesViewModel.getCitiesWithPrefix(it)
                 if (searchCitiesViewModel.citiesLiveData.value!!.isEmpty()) {
                     showCityNotFoundError(it)
@@ -80,6 +82,14 @@ class SearchCitiesFragment : Fragment() {
 
     private fun changeColorOfLayout(color: Int) {
         layout_search_cities.setBackgroundColor(ContextCompat.getColor(requireContext(), color))
+    }
+
+    private fun showNoCityForPrefixError() {
+        tv_no_cities.visibility = View.VISIBLE
+    }
+
+    private fun hideNoCityForPrefixError() {
+        tv_no_cities.visibility = View.GONE
     }
 
     private fun showCityNotFoundError(cityNotFound: String) {
