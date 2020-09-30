@@ -86,6 +86,17 @@ class SearchAlgorithmTests {
     }
 
     /**
+     * Error conditions - checks if the algorithm handles wrong inputs
+     *
+     */
+    @Test(expected = IllegalArgumentException::class)
+    fun searchAlgorithmErrorConditions() {
+        val citiesListWithEmptyCity = arrayListOf<City>()
+        citiesListWithEmptyCity.add(City())
+        trie.populateTrie(citiesListWithEmptyCity)
+    }
+
+    /**
      * Performance - checks if the method runs in a specific time interval
      */
     @Test(timeout = 150)
