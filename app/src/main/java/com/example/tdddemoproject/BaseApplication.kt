@@ -2,6 +2,7 @@ package com.example.tdddemoproject
 
 import android.app.Application
 import com.example.tdddemoproject.ui.search.SearchCitiesViewModel
+import com.example.tdddemoproject.utils.trie.Trie
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -17,8 +18,7 @@ class BaseApplication : Application() {
     }
 
     val trieModule = module {
-        // TODO Singleton DI for Trie algorithm class
-        // TODO -> single { TrieAlgorithm() }
+        single { Trie() }
     }
 
     override fun onCreate() {

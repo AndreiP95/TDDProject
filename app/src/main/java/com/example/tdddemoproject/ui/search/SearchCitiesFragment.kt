@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.fragment_search_cities.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.collections.ArrayList
 
 class SearchCitiesFragment : Fragment() {
 
@@ -40,7 +39,6 @@ class SearchCitiesFragment : Fragment() {
 
     private fun setupUI() {
         addCities()
-
         changeListByPrefix()
     }
 
