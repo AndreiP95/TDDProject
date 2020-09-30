@@ -9,10 +9,13 @@
         android:id="@+id/splashScreenFragment"
         android:name="com.example.tdddemoproject.ui.splashScreen.SplashScreenFragment"
         android:label="splash_screen_fragment"
-        tools:layout="@layout/splash_screen_fragment" >
+        tools:layout="@layout/splash_screen_fragment">
         <action
             android:id="@+id/action_go_to_search_screen"
-            app:destination="@id/searchCitiesFragment" />
+            app:destination="@id/searchCitiesFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:popUpTo="@id/splashScreenFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/searchCitiesFragment"
