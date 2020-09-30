@@ -12,22 +12,13 @@ class Trie(private var city: City? = null, private var value: String? = null) {
     private val children: MutableMap<Char, Trie> by lazy { HashMap() }
     private var terminal = false
 
-    companion object {
-        /**
-         * Method initialises Trie and inserts each City
-         *
-         * @param cities - Cities that will be inserted in the Trie
-         * @return - Trie that contains parsed cities
-         */
-        // TODO -> Init tree might be called multiple times here
-        // TODO -> Trie should be a Singleton object
-        // TODO -> Use DI in BaseApplication for Trie injection.
-
-        fun initTrie(cities: ArrayList<City>): Trie {
-            val citiesTrie = Trie()
-            cities.forEach { citiesTrie.insert(it) }
-            return citiesTrie
-        }
+    /**
+     * Populates the instantiated reference of the Trie
+     *
+     * @param cities - ArrayList of cities
+     */
+    fun populateTrie(cities: ArrayList<City>){
+        cities.forEach { this.insert(it) }
     }
 
     /**
@@ -35,7 +26,7 @@ class Trie(private var city: City? = null, private var value: String? = null) {
      *
      * @param city - City that will be inserted
      */
-    fun insert(city: City?) {
+    private fun insert(city: City?) {
         requireNotNull(city?.name) { "Cannot add null to a Trie" }
         var node: Trie? = this
         for (c in city?.name.toString().toCharArray()) {
