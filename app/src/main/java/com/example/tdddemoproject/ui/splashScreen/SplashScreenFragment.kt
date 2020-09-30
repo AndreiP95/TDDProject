@@ -5,30 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.tdddemoproject.R
 import com.example.tdddemoproject.repo.model.City
-import com.example.tdddemoproject.ui.search.SearchCitiesFragment
 import com.example.tdddemoproject.utils.searchAlgorithm
 import com.example.tdddemoproject.utils.trie.Trie
 import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.android.synthetic.main.splash_screen_fragment.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import org.koin.android.ext.android.inject
 import java.io.InputStream
+import kotlin.coroutines.CoroutineContext
 
 
-class SplashScreenFragment : Fragment() {
+class SplashScreenFragment : Fragment(), CoroutineScope {
     private lateinit var reader: InputStream
-    var cityJsonList : List<City>? = null
+    var cityJsonList: List<City>? = null
     val action = SplashScreenFragmentDirections.actionGoToSearchScreen()
+    private var job: Job? = null
+    private val trie = inject<Trie>()
 
-    companion object {
-        fun newInstance() = SplashScreenFragment()
-    }
-
-    private lateinit var viewModel: SplashScreenViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,20 +34,13 @@ class SplashScreenFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.splash_screen_fragment, container, false)
 
+        // TODO -> Should use return value of loadCities instead of a local variable for the list
+
         loadCities()
-        if(cityJsonList != null){
-            var list :List<City>  = cityJsonList as List<City>
-            var sortedCityList : List<City> =  HashSet<City>(list).sortedBy { it.name }
-            var finaList : ArrayList<City>? = null
-            for( item in sortedCityList){
-                finaList?.add(item)
-            }
-
-            var trieList =  finaList?.let { Trie.initTrie(it) }
-
-            trieList?.let { searchAlgorithm(it,"") }
+        if (cityJsonList != null) {
+            initTrieList()
             findNavController().navigate(action)
-        }else{
+        } else {
             root.splash_screen_layout.visibility = View.GONE
             root.loading_error_screen_layout.visibility = View.VISIBLE
         }
@@ -57,12 +48,8 @@ class SplashScreenFragment : Fragment() {
         return root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(SplashScreenViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
+    // TODO -> City loading should be on a different Thread
+    // TODO -> Move city loading to Repo package.
 
     private fun loadCities(): List<City>? {
         reader = resources.openRawResource(R.raw.cities)
@@ -73,6 +60,8 @@ class SplashScreenFragment : Fragment() {
         buffer?.let {
             text = String(it)
         }
+        // TODO -> list can be saved directly into an ArrayList without the need for conversion
+        // TODO -> From
         cityJsonList = ObjectMapper().readValue<List<City>>(
             text,
             ObjectMapper().typeFactory.constructCollectionType(
@@ -85,12 +74,20 @@ class SplashScreenFragment : Fragment() {
         return cityJsonList
     }
 
-    fun moveToSearchFragment(){
-        val manager: FragmentManager? = fragmentManager
-        val transaction: FragmentTransaction? = manager?.beginTransaction()
-        transaction?.replace(R.id.container, SearchCitiesFragment())
-        transaction?.addToBackStack(null)
-        transaction?.commit()
+    fun initTrieList() {
+        var list: List<City> = cityJsonList as List<City>
+        var sortedCityList: List<City> = HashSet<City>(list).sortedBy { it.name }
+        var finaList: ArrayList<City>? = null
+        for (item in sortedCityList) {
+            finaList?.add(item)
+        }
+
+        var trieList = finaList?.let { Trie.initTrie(it) }
+
+        trieList?.let { searchAlgorithm(it, "") }
     }
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Default + (job ?: Job())
 
 }

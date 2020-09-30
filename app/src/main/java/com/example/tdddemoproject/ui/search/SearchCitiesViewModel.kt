@@ -3,13 +3,14 @@ package com.example.tdddemoproject.ui.search
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tdddemoproject.repo.model.City
+import com.example.tdddemoproject.utils.trie.Trie
 import org.koin.core.KoinComponent
-import java.util.*
-import kotlin.collections.ArrayList
+import org.koin.core.inject
 
-class SearchCitiesViewModel() : ViewModel(), KoinComponent {
+class SearchCitiesViewModel : ViewModel(), KoinComponent {
 
     var citiesLiveData: MutableLiveData<ArrayList<City>> = MutableLiveData()
+    private val trie = inject<Trie>()
     private var cityArrayList = arrayListOf<City>()
 
     fun populateList() {
@@ -27,15 +28,8 @@ class SearchCitiesViewModel() : ViewModel(), KoinComponent {
     }
 
     fun getCitiesWithPrefix(s: String) {
-        val citiesWithPrefix = arrayListOf<City>()
-        for (city: City in cityArrayList) {
-            if (city.name?.toUpperCase(Locale.getDefault())!!
-                    .startsWith(s.toUpperCase(Locale.getDefault()))
-            ) {
-                citiesWithPrefix.add(city)
-            }
-        }
-        citiesLiveData.value = citiesWithPrefix
+        citiesLiveData.value = trie.value.findCitiesWith(s)
     }
+
 
 }

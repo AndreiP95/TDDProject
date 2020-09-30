@@ -8,43 +8,34 @@ import com.example.tdddemoproject.repo.model.City
  * @property city - city to add in trie
  * @property value - city name that is parsed inside the Trie
  */
-class Trie(private var city: City?, private var value: String?) {
-    private val children: MutableMap<Char, Trie>
+class Trie(private var city: City? = null, private var value: String? = null) {
+    private val children: MutableMap<Char, Trie> by lazy { HashMap() }
     private var terminal = false
 
-    companion object {
-        /**
-         * Method initialises Trie and inserts each City
-         *
-         * @param cities - Cities that will be inserted in the Trie
-         * @return - Trie that contains parsed cities
-         */
-        fun initTrie(cities: ArrayList<City>): Trie {
-            val citiesTrie = Trie()
-            cities.forEach { citiesTrie.insert(it) }
-            return citiesTrie
-        }
-    }
-
     /**
-     * Secondary constructor
+     * Populates the instantiated reference of the Trie
+     *
+     * @param cities - ArrayList of cities
      */
-    constructor() : this(null, null)
+    fun populateTrie(cities: ArrayList<City>){
+        cities.forEach { this.insert(it) }
+    }
 
     /**
      * Inserting city inside Trie
      *
      * @param city - City that will be inserted
      */
-    fun insert(city: City?) {
+    private fun insert(city: City?) {
         requireNotNull(city?.name) { "Cannot add null to a Trie" }
         var node: Trie? = this
         for (c in city?.name.toString().toCharArray()) {
             if (node != null) {
-                if (!node.children.containsKey(c)) {
-                    node.add(c, city)
+                val charToAdd = c.toLowerCase()
+                if (!node.children.containsKey(charToAdd)) {
+                    node.add(charToAdd, city)
                 }
-                node = node.children[c]
+                node = node.children[charToAdd]
             }
         }
         if (node != null) {
@@ -76,11 +67,12 @@ class Trie(private var city: City?, private var value: String?) {
     fun findCitiesWith(prefix: String): ArrayList<City>? {
         var node: Trie? = this
         for (c in prefix.toCharArray()) {
-            if (node != null && !node.children.containsKey(c)) {
+            val charToFind = c.toLowerCase()
+            if (node != null && !node.children.containsKey(charToFind)) {
                 return arrayListOf()
             }
             if (node != null) {
-                node = node.children[c]
+                node = node.children[charToFind]
             }
         }
         return node?.allPrefixes() ?: arrayListOf()
@@ -103,9 +95,5 @@ class Trie(private var city: City?, private var value: String?) {
             }
         }
         return results
-    }
-
-    init {
-        children = HashMap()
     }
 }
