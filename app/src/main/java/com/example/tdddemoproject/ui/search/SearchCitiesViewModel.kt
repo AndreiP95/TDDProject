@@ -11,20 +11,9 @@ class SearchCitiesViewModel : ViewModel(), KoinComponent {
 
     var citiesLiveData: MutableLiveData<ArrayList<City>> = MutableLiveData()
     private val trie = inject<Trie>()
-    private var cityArrayList = arrayListOf<City>()
 
     fun populateList() {
-        cityArrayList.add(City("Cluj", "Ro"))
-        cityArrayList.add(City("Galati", "Ro"))
-        cityArrayList.add(City("Bucharest", "RO"))
-        cityArrayList.add(City("Alabama", "US"))
-        cityArrayList.add(City("Calarasi", "Ro"))
-        cityArrayList.add(City("Sydney", "AU"))
-        cityArrayList.add(City("Cluj", "RO"))
-        cityArrayList.add(City("Constanta", "RO"))
-        cityArrayList.add(City("Albuquerque", "US"))
-
-        citiesLiveData.value = cityArrayList
+        citiesLiveData.value = trie.value.findCitiesWith("")
     }
 
     fun getCitiesWithPrefix(s: String) {
