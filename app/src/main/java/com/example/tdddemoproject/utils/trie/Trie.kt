@@ -17,7 +17,7 @@ class Trie(private var city: City? = null, private var value: String? = null) {
      *
      * @param cities - ArrayList of cities
      */
-    fun populateTrie(cities: ArrayList<City>){
+    fun populateTrie(cities: List<City>) {
         cities.forEach { this.insert(it) }
     }
 
