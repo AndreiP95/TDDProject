@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="padding_search_city_15dp">15dp</dimen>
+    <dimen name="text_size_city_not_found_22sp">22sp</dimen>
+    <dimen name="text_size_list_not_found_20sp">20sp</dimen>
+    <dimen name="margin_start_10dp">10dp</dimen>
+    <dimen name="magin_end_10dp">10dp</dimen>
+    <dimen name="magin_top_50dp">50dp</dimen>
+    <dimen name="margin_start_5dp">5dp</dimen>
+    <dimen name="padding_top_5dp">5dp</dimen>
+    <dimen name="padding_bottom_5dp">5dp</dimen>
+    <dimen name="separator_line_height_1dp">1dp</dimen>
+    <dimen name="margin_top_5dp">5dp</dimen>
+</resources>

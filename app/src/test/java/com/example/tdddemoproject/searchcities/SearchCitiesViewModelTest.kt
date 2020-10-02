@@ -1,92 +1,92 @@
 package com.example.tdddemoproject.searchcities
 
+import com.example.tdddemoproject.repo.model.City
+import com.example.tdddemoproject.utils.trie.Trie
 import junit.framework.Assert.*
+import org.junit.Before
 import org.junit.Test
 
 class SearchCitiesViewModelTest {
 
-    private val citiesList = arrayListOf(
-        MockCityModel("Galati", "RO"),
-        MockCityModel("Bucharest", "RO"),
-        MockCityModel("Alabama", "US"),
-        MockCityModel("Calarasi", "Ro"),
-        MockCityModel("Sydney", "AU"),
-        MockCityModel("Cluj", "RO"),
-        MockCityModel("Constanta", "RO"),
-        MockCityModel("Albuquerque", "US")
+    private val citiesList = listOf(
+        City("Galati", "RO"),
+        City("Bucharest", "RO"),
+        City("Alabama", "US"),
+        City("Calarasi", "Ro"),
+        City("Sydney", "AU"),
+        City("Cluj", "RO"),
+        City("Constanta", "RO"),
+        City("Albuquerque", "US")
     )
 
+    private var trie: Trie = Trie()
+
+    @Before
+    fun setup() {
+        trie.populateTrie(citiesList)
+    }
+
+    /**
+     * Checks if the first city is Alabama
+     */
     @Test
     fun checkFirstCities() {
-        assertTrue(citiesList.sortedBy {
-            it.name
-        }.let {
-            it[0].name == "Alabama" && it[1].name == "Albuquerque"
-        })
+        assertTrue(trie.findCitiesWith("")?.get(0)?.name == "Alabama")
     }
 
+    /**
+     * Check if there is no city with the name of "Arad"
+     */
     @Test
     fun checkNonExistingCity() {
-        assertFalse(citiesList.any { it.name == "Arad" })
+        val citiesWithPrefix = trie.findCitiesWith("")
+        if (citiesWithPrefix != null) {
+            assertFalse(citiesWithPrefix.any {
+                it.name == "Arad"
+            })
+        }
     }
 
+    /**
+     * Checks if a city with the given name is in the list
+     */
     @Test
     fun getCityByName() {
         val cityName = MockCityModel("Galati", "RO")
 
-        assertTrue(citiesList.sortedBy {
-            it.name
-        }.let { sortedList ->
-            sortedList.find { city ->
-                city.name == cityName.name
-            } != null
-        })
+        val citiesWithPrefix = trie.findCitiesWith("Galati")
+        if (citiesWithPrefix != null) {
+            assertTrue(citiesWithPrefix.find {
+                it.name == cityName.name
+            } != null)
+        }
     }
 
+    /**
+     * Checks if there is a city which starts with a given prefix
+     */
     @Test
     fun getCityByPrefix() {
         val prefix = "Alb"
-        val citiesReturned = arrayListOf<MockCityModel>()
-
-        assertTrue(citiesList.find {
-            it.name.startsWith(prefix)
-        } != null)
-
-        citiesList.forEach {
-            if (it.name.startsWith(prefix)) {
-                citiesReturned.add(it)
-            }
+        val citiesReturned = trie.findCitiesWith("Alb")
+        if (citiesReturned != null) {
+            assertTrue(citiesReturned.any {
+                it.name!!.startsWith(prefix)
+            })
         }
-
-        assertTrue(citiesReturned.size == 1)
     }
 
-    @Test
-    fun searchWithOneCharacter() {
-        val prefix = "a"
-
-        assertFalse(prefix.length > 3)
-    }
-
-    @Test
-    fun searchWithTwoCharacters() {
-        val prefix = "ab"
-
-        assertFalse(prefix.length > 3)
-    }
-
+    /**
+     * Checks if there are more cities with a given prefix
+     */
     @Test
     fun checkMoreCitiesReturned() {
         val prefix = "C"
-        val citiesReturned = arrayListOf<MockCityModel>()
+        val citiesReturned = trie.findCitiesWith(prefix)
 
-        citiesList.forEach {
-            if (it.name.startsWith(prefix)) {
-                citiesReturned.add(it)
-            }
+        if (citiesReturned != null) {
+            assertTrue(citiesReturned.size == 3)
         }
-
-        assertTrue(citiesReturned.size == 3)
     }
 
 }

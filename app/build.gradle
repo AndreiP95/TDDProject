@@ -27,6 +27,9 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     def nav_version = "2.3.0"
 
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -40,8 +43,19 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation "org.koin:koin-android:2.1.5"
-    implementation 'org.koin:koin-androidx-viewmodel:2.1.5'
-    implementation 'org.koin:koin-androidx-scope:2.1.5'
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.11.0"
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+    testImplementation 'org.mockito:mockito-inline:2.13.0'
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.0'
+    testImplementation 'org.powermock:powermock-core:2.0.0'
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.0'
+    testImplementation 'org.powermock:powermock-module-junit4-rule:2.0.0'
+
+    def koin_version = '2.2.0-alpha-1'
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    implementation "org.koin:koin-androidx-fragment:$koin_version"
 
 }
