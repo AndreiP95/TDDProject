@@ -12,20 +12,24 @@ class SearchCitiesUITest {
 
     private lateinit var fragm: SearchCitiesFragment
 
-    @Mock
-    val fragment = SearchCitiesFragment()
-
     @Before
     fun setup() {
         fragm = spy(SearchCitiesFragment::class.java)
     }
 
+    /**
+     * If the cityList is null or empty -> it should display an error for the city not fount
+     */
     @Test
     fun checkShowCityError() {
         val cityList = arrayListOf<City>()
         fragm.validateCityList(cityList, "abc")
         Mockito.verify(fragm, times(1)).showCityError("abc")
     }
+
+    /**
+     * If the cityList has elements -> it should hide the error
+     */
 
     @Test
     fun checkHideCityError() {
@@ -34,12 +38,20 @@ class SearchCitiesUITest {
         Mockito.verify(fragm, times(1)).hideCityError()
     }
 
+    /**
+     * If the cityList has elements -> it should show the list
+     */
+
     @Test
     fun checkShowRecyclerView() {
         val cityList = arrayListOf<City>()
         fragm.validateCityList(cityList, "abc")
         Mockito.verify(fragm, times(1)).hideRecyclerViewCities()
     }
+
+    /**
+     * If the cityList is null or empty -> it should hide the list
+     */
 
     @Test
     fun checkHideRecyclerView() {

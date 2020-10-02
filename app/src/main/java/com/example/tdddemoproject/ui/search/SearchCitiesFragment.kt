@@ -40,6 +40,9 @@ class SearchCitiesFragment : Fragment() {
         changeListByPrefix()
     }
 
+    /**
+     * Adds the cities in the recycler view from the mutable live data from the view model
+     */
     private fun addCities() {
         searchCitiesViewModel.getCitiesWithPrefix()
 
@@ -54,7 +57,9 @@ class SearchCitiesFragment : Fragment() {
             })
     }
 
-
+    /**
+     * It changes the list from the recycler view according to the search text
+     */
     private fun changeListByPrefix() {
         et_search_city.afterTextChanged { city ->
             showProgressBar()
@@ -71,6 +76,11 @@ class SearchCitiesFragment : Fragment() {
         }
     }
 
+    /**
+     * It validates if the city param is in the cityList param
+     * @param cityList - the current list of cities
+     * @param city - the city or the prefix of the city to be searched
+     */
     fun validateCityList(cityList: ArrayList<City>, city: String) {
         if (cityList.isNullOrEmpty()) {
             showCityError(city)
@@ -109,10 +119,6 @@ class SearchCitiesFragment : Fragment() {
     fun hideRecyclerViewCities() {
         recycler_view_cities.visibility = View.GONE
     }
-
-    /*fun hideCityNotFoundError() {
-        tv_no_cities.visibility = View.GONE
-    }*/
 
     fun showRecyclerViewCities() {
         recycler_view_cities.visibility = View.VISIBLE
