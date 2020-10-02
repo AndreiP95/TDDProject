@@ -32,9 +32,7 @@ class SearchCitiesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupUI()
-
     }
 
     private fun setupUI() {
@@ -42,8 +40,11 @@ class SearchCitiesFragment : Fragment() {
         changeListByPrefix()
     }
 
+    /**
+     * Adds the cities in the recycler view from the mutable live data from the view model
+     */
     private fun addCities() {
-        searchCitiesViewModel.populateList()
+        searchCitiesViewModel.getCitiesWithPrefix()
 
         searchCitiesViewModel.citiesLiveData.observe(
             viewLifecycleOwner,
@@ -56,56 +57,78 @@ class SearchCitiesFragment : Fragment() {
             })
     }
 
-
+    /**
+     * It changes the list from the recycler view according to the search text
+     */
     private fun changeListByPrefix() {
-        et_search_city.afterTextChanged {
+        et_search_city.afterTextChanged { city ->
             showProgressBar()
             hideNoCityForPrefixError()
             changeColorOfLayout(R.color.background_gray)
 
             lifecycleScope.launch {
                 delay(200)
-                changeColorOfLayout(R.color.background_white)
-                hideProgressBar()
-                showNoCityForPrefixError()
-                searchCitiesViewModel.getCitiesWithPrefix(it)
-                if (searchCitiesViewModel.citiesLiveData.value!!.isEmpty()) {
-                    showCityNotFoundError(it)
-                } else {
-                    hideCityNotFoundError()
+                searchCitiesViewModel.getCitiesWithPrefix(city)
+                searchCitiesViewModel.citiesLiveData.value?.let { cityList ->
+                    validateCityList(cityList, city)
                 }
-            }.start()
+            }
         }
     }
 
-    private fun changeColorOfLayout(color: Int) {
+    /**
+     * It validates if the city param is in the cityList param
+     * @param cityList - the current list of cities
+     * @param city - the city or the prefix of the city to be searched
+     */
+    fun validateCityList(cityList: ArrayList<City>, city: String) {
+        if (cityList.isNullOrEmpty()) {
+            showCityError(city)
+            hideRecyclerViewCities()
+        } else {
+            hideCityError()
+            showRecyclerViewCities()
+        }
+    }
+
+    fun hideCityError() {
+        hideNoCityForPrefixError()
+        changeColorOfLayout(R.color.background_white)
+        hideProgressBar()
+    }
+
+    fun showCityError(city: String) {
+        showCityNotFoundError(city)
+        changeColorOfLayout(R.color.background_white)
+        hideProgressBar()
+    }
+
+    fun changeColorOfLayout(color: Int) {
         layout_search_cities.setBackgroundColor(ContextCompat.getColor(requireContext(), color))
     }
 
-    private fun showNoCityForPrefixError() {
-        tv_no_cities.visibility = View.VISIBLE
-    }
-
-    private fun hideNoCityForPrefixError() {
+    fun hideNoCityForPrefixError() {
         tv_no_cities.visibility = View.GONE
     }
 
-    private fun showCityNotFoundError(cityNotFound: String) {
-        recycler_view_cities.visibility = View.GONE
+    fun showCityNotFoundError(cityNotFound: String) {
         tv_no_cities.text = "Nu exista orase pentru cuvantul cheie $cityNotFound"
         tv_no_cities.visibility = View.VISIBLE
     }
 
-    private fun hideCityNotFoundError() {
-        recycler_view_cities.visibility = View.VISIBLE
-        tv_no_cities.visibility = View.GONE
+    fun hideRecyclerViewCities() {
+        recycler_view_cities.visibility = View.GONE
     }
 
-    private fun showProgressBar() {
+    fun showRecyclerViewCities() {
+        recycler_view_cities.visibility = View.VISIBLE
+    }
+
+    fun showProgressBar() {
         progress_bar.visibility = View.VISIBLE
     }
 
-    private fun hideProgressBar() {
+    fun hideProgressBar() {
         progress_bar.visibility = View.GONE
     }
 

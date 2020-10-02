@@ -12,11 +12,7 @@ class SearchCitiesViewModel : ViewModel(), KoinComponent {
     var citiesLiveData: MutableLiveData<ArrayList<City>> = MutableLiveData()
     private val trie = inject<Trie>()
 
-    fun populateList() {
-        citiesLiveData.value = trie.value.findCitiesWith("")
-    }
-
-    fun getCitiesWithPrefix(s: String) {
+    fun getCitiesWithPrefix(s: String = "") {
         citiesLiveData.value = trie.value.findCitiesWith(s)
     }
 
