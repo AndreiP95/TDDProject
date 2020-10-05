@@ -11,7 +11,7 @@
 
 # General
   -	The application is build base on TDD and MVVM architecture pattern and is using [Android Architecture Components](https://developer.android.com/topic/libraries/architecture)  
-  - Using ViewModel and Databinding for UI implementations
+  - Using [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) and Databinding for UI implementations
   -	The Application is also using the following libraries: [Koin](https://insert-koin.io/), [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html), [Mockito](https://site.mockito.org/)
   -	Code cleanup for the app has been made using [Sonar Lint](https://www.sonarlint.org/)
   -	Written in Kotlin version : 1.4.10
